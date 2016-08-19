@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, abort, make_response
+#deprecated
 #from flask.ext.httpauth import HTTPBasicAuth
 from flask_httpauth import HTTPBasicAuth
 
