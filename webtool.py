@@ -1,6 +1,15 @@
 from flask import Flask, jsonify, abort, make_response
+#from flask.ext.httpauth import HTTPBasicAuth
+from flask_httpauth import HTTPBasicAuth
 
 app = Flask(__name__)
+auth = HTTPBasicAuth()
+
+users = {
+    "irul": "asd",
+    "john": "hello",
+    "susan": "bye"
+}
 
 tasks = [
     {
@@ -17,6 +26,14 @@ tasks = [
     }
 ]
 
+@auth.get_password
+def get_pw(username):
+#    if username == 'irul':
+#        return 'asd'
+    if username in users:
+        return users.get(username)
+    return None
+
 @app.errorhandler(404)
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
@@ -26,6 +43,7 @@ def index():
     return "Hello, World! Semangat 2017!"
 
 @app.route('/tasks', methods=['GET'])
+@auth.login_required
 def get_tasks():
     return jsonify({'tasks': tasks})
 
